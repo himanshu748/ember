@@ -24,30 +24,101 @@ body {
   font-family: var(--font-inter), system-ui, sans-serif;
 }
 
+::selection {
+  background: rgba(245, 158, 11, 0.28);
+  color: #fef3c7;
+}
+
 .font-display {
   font-family: var(--font-fraunces), Georgia, serif;
 }
 
-@keyframes emberPulse {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.12); }
+/* Film grain + vignette, sits above everything, never intercepts input */
+.atmosphere::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
 }
-.ember-dot {
-  animation: emberPulse 3.2s ease-in-out infinite;
+.atmosphere::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 49;
+  background: radial-gradient(ellipse 90% 70% at 50% 30%, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
 }
 
-@keyframes riseIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.rise-in {
-  animation: riseIn 0.6s ease-out both;
+/* Focus — always visible, ember-toned */
+:focus-visible {
+  outline: 2px solid rgba(245, 158, 11, 0.7);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
-@keyframes glowText {
-  0%, 100% { text-shadow: 0 0 24px rgba(245, 158, 11, 0.25); }
-  50% { text-shadow: 0 0 42px rgba(245, 158, 11, 0.5); }
+.ember-dot,
+.rise-in,
+.glow-text,
+.speak-bar,
+.bar-grow,
+.drift {
+  animation: none;
 }
-.glow-text {
-  animation: glowText 4s ease-in-out infinite;
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes emberPulse {
+    0%, 100% { opacity: 0.55; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.12); }
+  }
+  .ember-dot {
+    animation: emberPulse 3.2s ease-in-out infinite;
+  }
+
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .rise-in {
+    animation: riseIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes glowText {
+    0%, 100% { text-shadow: 0 0 24px rgba(245, 158, 11, 0.22); }
+    50% { text-shadow: 0 0 44px rgba(245, 158, 11, 0.45); }
+  }
+  .glow-text {
+    animation: glowText 4s ease-in-out infinite;
+  }
+
+  /* Rising ember motes on the landing hero */
+  @keyframes drift {
+    0% { transform: translateY(0) translateX(0); opacity: 0; }
+    12% { opacity: var(--mote-o, 0.7); }
+    88% { opacity: var(--mote-o, 0.7); }
+    100% { transform: translateY(-46vh) translateX(var(--mote-x, 20px)); opacity: 0; }
+  }
+  .drift {
+    animation: drift var(--mote-t, 11s) linear infinite;
+    animation-delay: var(--mote-d, 0s);
+  }
+
+  /* Speaking indicator bars */
+  @keyframes speak {
+    0%, 100% { transform: scaleY(0.35); }
+    50% { transform: scaleY(1); }
+  }
+  .speak-bar {
+    animation: speak 0.9s ease-in-out infinite;
+    transform-origin: bottom;
+  }
+
+  /* Atlas bars grow in */
+  @keyframes barGrow {
+    from { width: 0; }
+  }
+  .bar-grow {
+    animation: barGrow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
 }
