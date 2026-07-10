@@ -10,6 +10,13 @@ export const metadata: Metadata = {
   title: "EMBER — every abandoned passion still glows",
   description:
     "Your abandoned passions get a voice. Confess what you quit, talk to it, then rekindle it or lay it to rest — on-chain, forever.",
+  openGraph: {
+    title: "EMBER — every abandoned passion still glows",
+    description:
+      "The guitar in your closet has something to say. Confess, converse, then rekindle or lay to rest.",
+    images: ["/og.png"],
+  },
+  twitter: { card: "summary_large_image", images: ["/og.png"] },
 };
 
 export default function RootLayout({
