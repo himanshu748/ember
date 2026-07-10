@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EMBER 🔥 — every abandoned passion still glows
 
-## Getting Started
+Your abandoned passions get a voice. Confess what you quit, talk to it, then
+rekindle it with an on-chain pledge — or lay it to rest with a voiced eulogy.
 
-First, run the development server:
+Built for the **DEV Weekend Challenge: Passion Edition** (July 2026).
+
+## The loop
+
+**Confess → Converse → Decide → Commit → Belong**
+
+1. **Confess** — tell it what you abandoned. **Gemini** extracts your story and
+   forges the persona — picking *what speaks*: the object (your old bat), the
+   passion itself (cricket, personified), or the younger you.
+2. **Converse** — it talks back, with a real voice via **ElevenLabs**, matched
+   to its temperament. It remembers your details and pushes past your first excuse.
+3. **Decide** — two doors: **Rekindle** (it negotiates the smallest possible
+   first step) or **Lay to rest** (a personal eulogy, spoken aloud).
+4. **Commit** — the pledge or eulogy is attested on **Solana** devnet via the
+   Memo program: a timestamped, unforgeable record.
+5. **Belong** — your anonymized session joins the **Atlas of Abandoned
+   Passions**, aggregated in **Snowflake**: what humanity gives up, at what
+   age, killed by what.
+
+## Run it
 
 ```bash
+npm install
+cp .env.example .env.local   # add keys — every integration degrades gracefully without them
+node scripts/seed.mjs        # seed the Atlas
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Graceful degradation (judge-friendly, no setup required):
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Missing | Behavior |
+|---|---|
+| `GEMINI_API_KEY` | Scripted demo persona (full flow still walkable) |
+| `ELEVENLABS_API_KEY` | Text-only mode (first-class, not broken) |
+| `SNOWFLAKE_*` | Atlas computed from local JSON store |
+| Devnet airdrop rate-limited | Pledge recorded locally, labelled "pending on-chain" |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Snowflake
 
-## Learn More
+Run [sql/schema.sql](sql/schema.sql) in a worksheet, then fill `SNOWFLAKE_*`
+in `.env.local`. The Atlas switches from local aggregation to live Snowflake
+queries automatically.
 
-To learn more about Next.js, take a look at the following resources:
+## Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Next.js 16 · Gemini (`@google/genai`) · ElevenLabs TTS · Snowflake SDK ·
+`@solana/web3.js` (devnet Memo attestations) · Tailwind v4
