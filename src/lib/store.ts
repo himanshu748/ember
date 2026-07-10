@@ -3,8 +3,10 @@ import path from "path";
 import type { AtlasStats, SessionRecord } from "./types";
 
 /**
- * Storage adapter: Snowflake when SNOWFLAKE_* env vars are present,
- * local JSON file otherwise (so the app runs before creds are provisioned).
+ * Storage adapter. Snowflake is the system of record when SNOWFLAKE_* env
+ * vars are present (required in production — serverless filesystems are
+ * ephemeral). A local JSON file is kept as a best-effort cache and as the
+ * only store during keyless local dev.
  */
 
 const DATA_DIR = path.join(process.cwd(), ".data");
@@ -19,8 +21,12 @@ function readLocal(): SessionRecord[] {
 }
 
 function writeLocal(rows: SessionRecord[]) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(DATA_FILE, JSON.stringify(rows, null, 2));
+  try {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(DATA_FILE, JSON.stringify(rows, null, 2));
+  } catch {
+    /* read-only filesystem (serverless) — Snowflake is the record */
+  }
 }
 
 function computeAtlas(rows: SessionRecord[], source: AtlasStats["source"]): AtlasStats {
@@ -50,7 +56,7 @@ function computeAtlas(rows: SessionRecord[], source: AtlasStats["source"]): Atla
 const SF_ENABLED = !!(
   process.env.SNOWFLAKE_ACCOUNT &&
   process.env.SNOWFLAKE_USER &&
-  (process.env.SNOWFLAKE_PASSWORD || process.env.SNOWFLAKE_TOKEN)
+  process.env.SNOWFLAKE_PASSWORD
 );
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,6 +74,7 @@ async function sf(): Promise<any> {
     warehouse: process.env.SNOWFLAKE_WAREHOUSE || "COMPUTE_WH",
     database: process.env.SNOWFLAKE_DATABASE || "EMBER",
     schema: process.env.SNOWFLAKE_SCHEMA || "PUBLIC",
+    clientSessionKeepAlive: true,
   });
   await new Promise((res, rej) => conn.connect((e: unknown) => (e ? rej(e) : res(null))));
   sfConn = conn;
@@ -87,10 +94,31 @@ async function sfQuery(sqlText: string, binds: any[] = []): Promise<any[]> {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function fromRow(r: any): SessionRecord {
+  return {
+    id: r.ID,
+    passionLabel: r.PASSION_LABEL,
+    passionCategory: r.PASSION_CATEGORY,
+    yearsActive: r.YEARS_ACTIVE != null ? Number(r.YEARS_ACTIVE) : null,
+    yearsDormant: r.YEARS_DORMANT != null ? Number(r.YEARS_DORMANT) : null,
+    abandonmentReason: r.ABANDONMENT_REASON,
+    ageAtAbandonment: r.AGE_AT_ABANDONMENT != null ? Number(r.AGE_AT_ABANDONMENT) : null,
+    emotionalTone: r.EMOTIONAL_TONE,
+    confession: r.CONFESSION ?? "",
+    persona: r.PERSONA_JSON
+      ? JSON.parse(r.PERSONA_JSON)
+      : { name: "", embodiment: "the_passion_itself", temperament: "wistful", openingLine: "", systemPrompt: "" },
+    verdict: r.VERDICT ?? "undecided",
+    verdictText: r.VERDICT_TEXT ?? null,
+    pledgeTx: r.PLEDGE_TX ?? null,
+    createdAt: r.CREATED_AT ? new Date(r.CREATED_AT).toISOString() : new Date().toISOString(),
+  };
+}
+
 /* ---------------- Public API ---------------- */
 
 export async function insertSession(s: SessionRecord): Promise<void> {
-  // Always keep a local copy — personas/conversation state are read back from it.
   const rows = readLocal();
   rows.push(s);
   writeLocal(rows);
@@ -98,10 +126,11 @@ export async function insertSession(s: SessionRecord): Promise<void> {
   try {
     await sfQuery(
       `INSERT INTO sessions (id, passion_label, passion_category, years_active, years_dormant,
-         abandonment_reason, age_at_abandonment, emotional_tone, verdict, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP())`,
+         abandonment_reason, age_at_abandonment, emotional_tone, verdict, confession, persona_json, verdict_text)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [s.id, s.passionLabel, s.passionCategory, s.yearsActive, s.yearsDormant,
-       s.abandonmentReason, s.ageAtAbandonment, s.emotionalTone, s.verdict]
+       s.abandonmentReason, s.ageAtAbandonment, s.emotionalTone, s.verdict,
+       s.confession, JSON.stringify(s.persona), s.verdictText]
     );
   } catch (e) {
     console.error("Snowflake insert failed (local copy kept):", e);
@@ -109,19 +138,32 @@ export async function insertSession(s: SessionRecord): Promise<void> {
 }
 
 export async function getSession(id: string): Promise<SessionRecord | null> {
-  return readLocal().find((r) => r.id === id) ?? null;
+  const local = readLocal().find((r) => r.id === id);
+  if (local) return local;
+  if (!SF_ENABLED) return null;
+  try {
+    const rows = await sfQuery(`SELECT * FROM sessions WHERE id = ? LIMIT 1`, [id]);
+    return rows.length ? fromRow(rows[0]) : null;
+  } catch (e) {
+    console.error("Snowflake getSession failed:", e);
+    return null;
+  }
 }
 
 export async function updateSession(id: string, patch: Partial<SessionRecord>): Promise<void> {
   const rows = readLocal();
   const i = rows.findIndex((r) => r.id === id);
-  if (i === -1) return;
-  rows[i] = { ...rows[i], ...patch };
-  writeLocal(rows);
+  let merged: SessionRecord | null = null;
+  if (i !== -1) {
+    rows[i] = { ...rows[i], ...patch };
+    merged = rows[i];
+    writeLocal(rows);
+  }
   if (!SF_ENABLED) return;
   try {
-    await sfQuery(`UPDATE sessions SET verdict = ?, pledge_tx = ? WHERE id = ?`, [
-      rows[i].verdict, rows[i].pledgeTx, id,
+    const current = merged ?? { ...(await getSession(id)), ...patch } as SessionRecord;
+    await sfQuery(`UPDATE sessions SET verdict = ?, verdict_text = ?, pledge_tx = ? WHERE id = ?`, [
+      current.verdict ?? "undecided", current.verdictText ?? null, current.pledgeTx ?? null, id,
     ]);
   } catch (e) {
     console.error("Snowflake update failed:", e);

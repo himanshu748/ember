@@ -26,12 +26,19 @@ export async function attestOnChain(memo: object): Promise<PledgeResult> {
     const conn = new web3.Connection(RPC, "confirmed");
 
     let vault: InstanceType<typeof web3.Keypair>;
-    if (fs.existsSync(VAULT_FILE)) {
+    if (process.env.SOLANA_VAULT_KEY) {
+      // Serverless-friendly: keypair supplied via env (JSON array of bytes).
+      vault = web3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.SOLANA_VAULT_KEY)));
+    } else if (fs.existsSync(VAULT_FILE)) {
       vault = web3.Keypair.fromSecretKey(Uint8Array.from(JSON.parse(fs.readFileSync(VAULT_FILE, "utf8"))));
     } else {
       vault = web3.Keypair.generate();
-      fs.mkdirSync(path.dirname(VAULT_FILE), { recursive: true });
-      fs.writeFileSync(VAULT_FILE, JSON.stringify([...vault.secretKey]));
+      try {
+        fs.mkdirSync(path.dirname(VAULT_FILE), { recursive: true });
+        fs.writeFileSync(VAULT_FILE, JSON.stringify([...vault.secretKey]));
+      } catch {
+        /* read-only fs — ephemeral vault */
+      }
     }
 
     let balance = await conn.getBalance(vault.publicKey);

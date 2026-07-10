@@ -6,6 +6,9 @@ import "./globals.css";
 const fraunces = Fraunces({ subsets: ["latin"], variable: "--font-fraunces" });
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
+const OG_IMAGE =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_318C23nPR0PT9UTOdpsLk2Xj8ig/hf_20260710_042119_8f518ebb-cb3b-4e62-ba4a-33106625104d.png";
+
 export const metadata: Metadata = {
   title: "EMBER — every abandoned passion still glows",
   description:
@@ -14,9 +17,9 @@ export const metadata: Metadata = {
     title: "EMBER — every abandoned passion still glows",
     description:
       "The guitar in your closet has something to say. Confess, converse, then rekindle or lay to rest.",
-    images: ["/og.png"],
+    images: [OG_IMAGE],
   },
-  twitter: { card: "summary_large_image", images: ["/og.png"] },
+  twitter: { card: "summary_large_image", images: [OG_IMAGE] },
 };
 
 export default function RootLayout({
