@@ -49,7 +49,7 @@ export default async function Landing() {
           />
         ))}
 
-        <div className="relative mx-auto flex max-w-3xl flex-col items-center px-6 pb-28 pt-28 text-center sm:pt-36">
+        <div className="relative mx-auto flex min-h-[86svh] max-w-3xl flex-col items-center justify-center px-6 py-24 text-center">
           <p className="rise-in mb-8 rounded-full border border-amber-500/25 bg-amber-500/[0.07] px-4 py-1.5 text-xs tracking-[0.22em] text-amber-300/90 uppercase">
             Every abandoned passion still glows
           </p>
@@ -72,6 +72,26 @@ export default async function Landing() {
           <p className="mt-4 text-xs tracking-wide text-stone-500">
             3 minutes · no account · headphones recommended
           </p>
+        </div>
+      </section>
+
+      {/* ---- Marquee of the abandoned ---- */}
+      <section aria-hidden className="overflow-hidden border-y border-stone-800/60 bg-stone-950/60 py-4">
+        <div className="marquee-track flex w-max gap-10 whitespace-nowrap">
+          {[0, 1].map((half) => (
+            <div key={half} className="flex gap-10 text-sm tracking-[0.2em] text-stone-600 uppercase">
+              {[
+                "the guitar", "cricket", "the novel at chapter three", "ballet", "the marathon",
+                "oil painting", "french", "the piano", "skateboarding", "the telescope",
+                "pottery", "stand-up comedy", "the sketchbooks", "swimming", "the violin",
+              ].map((p) => (
+                <span key={p} className="flex items-center gap-10">
+                  {p}
+                  <span className="h-1 w-1 rounded-full bg-amber-600/60" />
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
       </section>
 

@@ -20,6 +20,22 @@ const COMPILE_LINES = [
   "…finding its voice…",
 ];
 
+function PassionLine({ text, animate }: { text: string; animate: boolean }) {
+  if (!animate) {
+    return <p className="font-display text-xl leading-relaxed text-amber-50/95">{text}</p>;
+  }
+  return (
+    <p className="font-display text-xl leading-relaxed text-amber-50/95">
+      {text.split(" ").map((w, i) => (
+        <span key={i} className="word-in" style={{ animationDelay: `${Math.min(i * 90, 2600)}ms` }}>
+          {w}
+          {i < text.split(" ").length - 1 ? " " : ""}
+        </span>
+      ))}
+    </p>
+  );
+}
+
 function SpeakingIndicator() {
   return (
     <span className="inline-flex items-end gap-[3px]" aria-label="speaking" role="status">
@@ -210,7 +226,12 @@ export default function Session() {
 
       {step === "compiling" && (
         <section className="flex flex-col items-center pt-28 text-center" role="status" aria-live="polite">
-          <div className="ember-dot h-6 w-6 rounded-full bg-amber-400 shadow-[0_0_80px_24px_rgba(245,158,11,0.4)]" />
+          <div className="relative flex h-24 w-24 items-center justify-center">
+            <span aria-hidden className="ring-pulse absolute inset-0 rounded-full border border-amber-500/40" />
+            <span aria-hidden className="ring-pulse absolute inset-0 rounded-full border border-amber-500/25" style={{ animationDelay: "0.9s" }} />
+            <span aria-hidden className="ring-pulse absolute inset-0 rounded-full border border-amber-500/15" style={{ animationDelay: "1.8s" }} />
+            <div className="ember-dot h-6 w-6 rounded-full bg-amber-400 shadow-[0_0_80px_24px_rgba(245,158,11,0.4)]" />
+          </div>
           <p className="font-display mt-10 text-2xl text-stone-200">{COMPILE_LINES[compileLine]}</p>
           <p className="mt-3 text-sm text-stone-500">forging the one who will speak to you</p>
         </section>
@@ -237,7 +258,7 @@ export default function Session() {
                 ) : (
                   <div className="relative max-w-[88%] pl-5">
                     <span aria-hidden className="absolute left-0 top-1 bottom-1 w-px bg-gradient-to-b from-amber-500/70 via-amber-700/40 to-transparent" />
-                    <p className="font-display text-xl leading-relaxed text-amber-50/95">{t.text}</p>
+                    <PassionLine text={t.text} animate={i === turns.length - 1} />
                   </div>
                 )}
               </div>

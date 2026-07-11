@@ -1,4 +1,5 @@
 import { atlasStats } from "@/lib/store";
+import CountUp from "./count-up";
 
 export const dynamic = "force-dynamic";
 
@@ -74,7 +75,9 @@ export default async function Atlas() {
                 key={c.l}
                 className="rounded-2xl border border-stone-800/80 bg-stone-900/40 p-6 text-center transition-all duration-300 hover:border-amber-800/60 hover:shadow-[0_0_30px_rgba(245,158,11,0.06)]"
               >
-                <div className="font-display text-4xl text-amber-400">{c.v}</div>
+                <div className="font-display text-4xl text-amber-400">
+                  <CountUp value={c.v} />
+                </div>
                 <div className="mt-2 text-[11px] uppercase tracking-wide text-stone-500">{c.l}</div>
               </div>
             ))}
