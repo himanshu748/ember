@@ -38,7 +38,7 @@ Try it in two clicks: tap an example confession (cricket at 17, the closet guita
 
 ![The things we leave behind](https://d8j0ntlcm91z4.cloudfront.net/user_318C23nPR0PT9UTOdpsLk2Xj8ig/hf_20260710_042119_8f518ebb-cb3b-4e62-ba4a-33106625104d.png)
 
-A real pledge, sealed on Solana devnet: [view the transaction](https://explorer.solana.com/tx/66H28mnFaeJURiRVRAvGio97FEztLtVARiLk8xQeinxCoLFbHYTka5RJknzsvqyCpNizemNvTwfi61pqhTzsFuZF?cluster=devnet).
+My cricket pledge, sealed on Solana devnet (the memo reads: passion cricket, commitment: book one hour in the nets this week): [view the transaction](https://explorer.solana.com/tx/2de9Lj1o5xUDb8Hg6qKkRfaCYKaV1AFt8v1q7zpUDS4DBuUdijZaBNWiN3ozXHD2H6MB4CUjZvKkYJSavY68hmDK?cluster=devnet).
 
 ## Code
 
