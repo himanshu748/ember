@@ -200,6 +200,30 @@ export default function Session() {
             What did you abandon? When did you start, when did you stop, and what killed it?
             Be honest — it already knows.
           </p>
+          <div className="mt-6 flex flex-wrap gap-2" aria-label="Example confessions">
+            {[
+              {
+                label: "🏏 cricket at 17",
+                text: "I played cricket every evening from 11 to 17. I told everyone I'd play Ranji Trophy one day. Then the entrance-exam years came and the bat went behind the cupboard. Eight years now.",
+              },
+              {
+                label: "🎸 the closet guitar",
+                text: "I bought a guitar in college and learned four songs. I told myself I'd write my own someday. It's been leaning in the closet corner for six years. I dust it sometimes. I never tune it.",
+              },
+              {
+                label: "📓 the novel at chapter 3",
+                text: "I started writing a novel three years ago. Thirty thousand words, then chapter three. I still think about the characters. I'm scared that if I open the file, it will be bad.",
+              },
+            ].map((ex) => (
+              <button
+                key={ex.label}
+                onClick={() => setConfession(ex.text)}
+                className="rounded-full border border-stone-700 bg-stone-900/50 px-4 py-2 text-xs text-stone-400 transition-colors hover:border-amber-700/60 hover:text-amber-300"
+              >
+                {ex.label}
+              </button>
+            ))}
+          </div>
           <label htmlFor="confession" className="sr-only">
             Your confession
           </label>
@@ -209,7 +233,7 @@ export default function Session() {
             onChange={(e) => setConfession(e.target.value)}
             rows={7}
             placeholder="I played cricket every evening from 11 to 17. I told everyone I'd play Ranji one day. Then the entrance-exam years came, and the bat went behind the cupboard. It's been eight years…"
-            className="mt-6 w-full resize-none rounded-2xl border border-stone-700/80 bg-stone-900/70 p-5 leading-relaxed text-stone-100 shadow-inner placeholder-stone-600 transition-colors focus:border-amber-500/70 focus:outline-none"
+            className="mt-3 w-full resize-none rounded-2xl border border-stone-700/80 bg-stone-900/70 p-5 leading-relaxed text-stone-100 shadow-inner placeholder-stone-600 transition-colors focus:border-amber-500/70 focus:outline-none"
           />
           <div className="mt-5 flex items-center justify-between">
             <p className="text-xs text-stone-600">It speaks out loud — headphones on.</p>
