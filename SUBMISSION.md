@@ -30,6 +30,8 @@ I built a thing and it emotionally wrecked me on the first test run. Working as 
 
 ## Demo
 
+{% embed https://youtu.be/9ZJ2rCCzg0U %}
+
 🔗 **Live app:** https://ember-himanshus-projects-acd54afd.vercel.app
 
 Try it in two clicks: tap an example confession (cricket at 17, the closet guitar, the novel at chapter three), headphones on. The voice is the point.
