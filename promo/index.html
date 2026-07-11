@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en" data-resolution="landscape">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0c0a09; }
+      body { font-family: "Inter", sans-serif; color: #e7e5e4; }
+      .serif { font-family: "Fraunces", Georgia, serif; }
+      .clip { position: absolute; inset: 0; }
+      .center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+      .ember { color: #f59e0b; }
+      .kicker { font-size: 26px; letter-spacing: 0.35em; text-transform: uppercase; color: #a8a29e; }
+      .shot { width: 1560px; border-radius: 24px; border: 1px solid #292524; box-shadow: 0 40px 120px rgba(0,0,0,0.6), 0 0 80px rgba(245,158,11,0.08); }
+      .caption { margin-top: 44px; font-size: 40px; color: #d6d3d1; }
+      .dot { width: 22px; height: 22px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 90px 30px rgba(245,158,11,0.45); }
+      .vignette { position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(ellipse 85% 70% at 50% 40%, transparent 55%, rgba(0,0,0,0.55) 100%); }
+      .monospace { font-family: "JetBrains Mono", monospace; }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="80"
+      data-width="1920"
+      data-height="1080"
+    >
+      <!-- S1 · The hook -->
+      <div id="s1" class="clip center" data-start="0" data-duration="8" data-track-index="1">
+        <div class="dot" id="s1dot"></div>
+        <div id="s1a" class="serif" style="margin-top:70px; font-size:64px; font-weight:300; color:#e7e5e4;">
+          Everyone talks about the passions they have.
+        </div>
+        <div id="s1b" class="serif" style="margin-top:28px; font-size:64px; font-weight:500;">
+          <span class="ember">Nobody talks about the ones they quit.</span>
+        </div>
+      </div>
+
+      <!-- S2 · Brand reveal -->
+      <div id="s2" class="clip" data-start="8" data-duration="7" data-track-index="1">
+        <img id="s2img" src="assets/still.png" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.55;" />
+        <div class="vignette"></div>
+        <div class="center" style="position:absolute; inset:0;">
+          <div id="s2logo" class="serif" style="font-size:150px; letter-spacing:0.22em; color:#fbbf24; text-shadow:0 0 60px rgba(245,158,11,0.45);">EMBER</div>
+          <div id="s2tag" class="kicker" style="margin-top:30px;">every abandoned passion still glows</div>
+        </div>
+      </div>
+
+      <!-- S3 · The product -->
+      <div id="s3" class="clip center" data-start="15" data-duration="8" data-track-index="1">
+        <img id="s3img" class="shot" src="assets/land.png" alt="" />
+        <div id="s3cap" class="caption">Confess what you quit. <span class="ember">Two clicks, no account.</span></div>
+      </div>
+
+      <!-- S4 · The persona compiler -->
+      <div id="s4" class="clip center" data-start="23" data-duration="8" data-track-index="1">
+        <img id="s4img" class="shot" src="assets/confess.png" alt="" />
+        <div id="s4cap" class="caption"><span class="ember">Gemini</span> forges its persona: the object, the game itself, or the younger you.</div>
+      </div>
+
+      <!-- S5 · THE VOICE -->
+      <div id="s5" class="clip center" data-start="31" data-duration="15" data-track-index="1">
+        <div class="dot" id="s5dot" style="width:14px;height:14px;"></div>
+        <div id="s5name" class="serif" style="margin-top:48px; font-size:54px; color:#fbbf24;">Your old cricket kit bag</div>
+        <div class="kicker" id="s5kick" style="margin-top:14px; font-size:20px;">object &nbsp;·&nbsp; wry &nbsp;·&nbsp; speaking</div>
+        <div id="s5line" class="serif" style="margin-top:70px; max-width:1400px; font-size:58px; line-height:1.45; font-weight:300; color:#fef3c7;">
+          <span class="w">“It’s</span> <span class="w">been</span> <span class="w">a</span> <span class="w">while</span> <span class="w">since</span>
+          <span class="w">you</span> <span class="w">hoisted</span> <span class="w">me</span> <span class="w">up</span> <span class="w">here,</span>
+          <span class="w">hasn’t</span> <span class="w">it?</span> <span class="w">I</span> <span class="w">still</span> <span class="w">remember</span>
+          <span class="w">the</span> <span class="w">thrill</span> <span class="w">of</span> <span class="w">a</span> <span class="w">good</span>
+          <span class="w">cover</span> <span class="w">drive,</span> <span class="w">too.”</span>
+        </div>
+        <div id="s5cap" class="caption" style="font-size:34px;">It talks back. Out loud. <span class="ember">(ElevenLabs)</span></div>
+      </div>
+
+      <!-- S6 · Two doors -->
+      <div id="s6" class="clip center" data-start="46" data-duration="9" data-track-index="1">
+        <div style="display:flex; gap:44px;">
+          <div id="door1" style="width:640px; padding:56px; border-radius:32px; border:1px solid rgba(217,119,6,0.55); background:linear-gradient(180deg, rgba(120,53,15,0.35), #0c0a09); text-align:left;">
+            <div style="font-size:52px;">🔥</div>
+            <div class="serif" style="margin-top:20px; font-size:48px; color:#fbbf24;">Rekindle it</div>
+            <div style="margin-top:16px; font-size:28px; line-height:1.5; color:#d6d3d1;">It negotiates the smallest possible first step. You pledge it on-chain.</div>
+          </div>
+          <div id="door2" style="width:640px; padding:56px; border-radius:32px; border:1px solid #44403c; background:rgba(28,25,23,0.5); text-align:left;">
+            <div style="font-size:52px;">🕯️</div>
+            <div class="serif" style="margin-top:20px; font-size:48px; color:#e7e5e4;">Lay it to rest</div>
+            <div style="margin-top:16px; font-size:28px; line-height:1.5; color:#d6d3d1;">A spoken eulogy and a permanent stone. Closure is a feature.</div>
+          </div>
+        </div>
+        <div id="s6cap" class="caption">Two doors. It will honor either one.</div>
+      </div>
+
+      <!-- S7 · On-chain -->
+      <div id="s7" class="clip center" data-start="55" data-duration="8" data-track-index="1">
+        <div id="s7card" style="width:1100px; padding:64px; border-radius:32px; border:1px solid #44403c; background:rgba(28,25,23,0.6); text-align:center;">
+          <div class="kicker" style="font-size:22px;">Revival pledge · sealed on Solana devnet</div>
+          <div class="serif" style="margin-top:34px; font-size:44px; color:#fef3c7;">“Book one hour of nets and actually go, by Sunday evening”</div>
+          <div class="monospace" style="margin-top:38px; font-size:22px; color:#78716c; word-break:break-all;">66H28mnFaeJURiRVRAvGio97FEztLtVARiLk8xQeinxCoLFbHYTka5RJknzsvqyCpNizemNvTwfi61pqhTzsFuZF</div>
+        </div>
+        <div id="s7cap" class="caption">A pledge you can edit is a wish. <span class="ember">This one is permanent.</span></div>
+      </div>
+
+      <!-- S8 · The Atlas -->
+      <div id="s8" class="clip center" data-start="63" data-duration="8" data-track-index="1">
+        <img id="s8img" class="shot" src="assets/atlas.png" alt="" />
+        <div id="s8cap" class="caption">The Atlas of Abandoned Passions. <span class="ember">Live in Snowflake.</span></div>
+      </div>
+
+      <!-- S9 · Lockup -->
+      <div id="s9" class="clip center" data-start="71" data-duration="9" data-track-index="1">
+        <div class="dot" id="s9dot"></div>
+        <div id="s9logo" class="serif" style="margin-top:56px; font-size:110px; letter-spacing:0.22em; color:#fbbf24; text-shadow:0 0 60px rgba(245,158,11,0.4);">EMBER</div>
+        <div id="s9stack" class="kicker" style="margin-top:36px;">Gemini · ElevenLabs · Snowflake · Solana</div>
+        <div id="s9url" style="margin-top:40px; font-size:30px; color:#a8a29e;">ember-himanshus-projects-acd54afd.vercel.app</div>
+        <div id="s9tag" class="serif" style="margin-top:26px; font-size:34px; font-style:italic; color:#78716c;">There is a closet like yours in every house on earth.</div>
+      </div>
+
+      <!-- The kit bag speaks -->
+      <audio id="kitbag" class="clip" data-start="33" data-duration="7" data-track-index="2" src="assets/kitbag.mp3"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // S1
+      tl.from("#s1dot", { opacity: 0, scale: 0.4, duration: 1.2, ease: "power2.out" }, 0);
+      tl.from("#s1a", { opacity: 0, y: 26, duration: 1.0, ease: "power3.out" }, 0.8);
+      tl.from("#s1b", { opacity: 0, y: 26, duration: 1.0, ease: "power3.out" }, 3.2);
+      tl.to("#s1", { opacity: 0, duration: 0.8 }, 7.2);
+      tl.set("#s1", { opacity: 0 }, 8);
+
+      // S2
+      tl.from("#s2img", { scale: 1.08, duration: 7, ease: "none" }, 8);
+      tl.from("#s2logo", { opacity: 0, duration: 1.6, ease: "power2.out" }, 8.4);
+      tl.from("#s2tag", { opacity: 0, y: 16, duration: 1.0 }, 9.6);
+      tl.to("#s2", { opacity: 0, duration: 0.8 }, 14.2);
+      tl.set("#s2", { opacity: 0 }, 15);
+
+      // S3
+      tl.from("#s3img", { opacity: 0, y: 60, scale: 0.96, duration: 1.2, ease: "power3.out" }, 15);
+      tl.to("#s3img", { scale: 1.03, duration: 6.5, ease: "none" }, 16.2);
+      tl.from("#s3cap", { opacity: 0, y: 20, duration: 0.9 }, 16);
+      tl.to("#s3", { opacity: 0, duration: 0.8 }, 22.2);
+      tl.set("#s3", { opacity: 0 }, 23);
+
+      // S4
+      tl.from("#s4img", { opacity: 0, y: 60, scale: 0.96, duration: 1.2, ease: "power3.out" }, 23);
+      tl.to("#s4img", { scale: 1.03, duration: 6.5, ease: "none" }, 24.2);
+      tl.from("#s4cap", { opacity: 0, y: 20, duration: 0.9 }, 24);
+      tl.to("#s4", { opacity: 0, duration: 0.8 }, 30.2);
+      tl.set("#s4", { opacity: 0 }, 31);
+
+      // S5 — the voice
+      tl.from("#s5dot", { opacity: 0, scale: 0.4, duration: 0.8 }, 31);
+      tl.from("#s5name", { opacity: 0, y: 24, duration: 0.9, ease: "power3.out" }, 31.4);
+      tl.from("#s5kick", { opacity: 0, duration: 0.8 }, 32);
+      tl.from("#s5line .w", { opacity: 0, y: 10, duration: 0.45, stagger: 0.24, ease: "power2.out" }, 33.2);
+      tl.from("#s5cap", { opacity: 0, y: 16, duration: 0.9 }, 42.5);
+      tl.to("#s5", { opacity: 0, duration: 0.8 }, 45.2);
+      tl.set("#s5", { opacity: 0 }, 46);
+
+      // S6 — doors
+      tl.from("#door1", { opacity: 0, x: -70, duration: 1.0, ease: "power3.out" }, 46);
+      tl.from("#door2", { opacity: 0, x: 70, duration: 1.0, ease: "power3.out" }, 46.3);
+      tl.from("#s6cap", { opacity: 0, y: 20, duration: 0.9 }, 47.4);
+      tl.to("#s6", { opacity: 0, duration: 0.8 }, 54.2);
+      tl.set("#s6", { opacity: 0 }, 55);
+
+      // S7 — on-chain
+      tl.from("#s7card", { opacity: 0, y: 50, scale: 0.97, duration: 1.1, ease: "power3.out" }, 55);
+      tl.from("#s7cap", { opacity: 0, y: 20, duration: 0.9 }, 56.4);
+      tl.to("#s7", { opacity: 0, duration: 0.8 }, 62.2);
+      tl.set("#s7", { opacity: 0 }, 63);
+
+      // S8 — atlas
+      tl.from("#s8img", { opacity: 0, y: 60, scale: 0.96, duration: 1.2, ease: "power3.out" }, 63);
+      tl.to("#s8img", { scale: 1.03, duration: 6.5, ease: "none" }, 64.2);
+      tl.from("#s8cap", { opacity: 0, y: 20, duration: 0.9 }, 64);
+      tl.to("#s8", { opacity: 0, duration: 0.8 }, 70.2);
+      tl.set("#s8", { opacity: 0 }, 71);
+
+      // S9 — lockup
+      tl.from("#s9dot", { opacity: 0, scale: 0.4, duration: 1.0 }, 71);
+      tl.from("#s9logo", { opacity: 0, y: 26, duration: 1.2, ease: "power3.out" }, 71.4);
+      tl.from("#s9stack", { opacity: 0, y: 18, duration: 0.9 }, 72.4);
+      tl.from("#s9url", { opacity: 0, duration: 0.9 }, 73.2);
+      tl.from("#s9tag", { opacity: 0, duration: 1.2 }, 74.2);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
