@@ -341,7 +341,7 @@ export default function Session() {
                   <div aria-hidden className="text-2xl">🔥</div>
                   <div className="font-display mt-3 text-2xl text-amber-300">Rekindle it</div>
                   <p className="mt-2 text-sm leading-relaxed text-stone-400">
-                    It negotiates the smallest possible first step. You pledge it on-chain — where you can&apos;t quietly delete it.
+                    It negotiates the smallest possible first step. Your pledge gets its own on-chain account with real stake in it — settled when you report back.
                   </p>
                 </button>
                 <button

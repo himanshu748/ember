@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { checkinReaction } from "@/lib/gemini";
 import { speak } from "@/lib/tts";
-import { attestOnChain } from "@/lib/solana";
+import { settlePledgeStake } from "@/lib/solana";
 import { getSession, updateSession } from "@/lib/store";
 
 export const runtime = "nodejs";
@@ -18,10 +18,11 @@ export async function POST(req: Request) {
   const reaction = await checkinReaction(session, !!didIt);
   const audio = await speak(reaction, session.persona.temperament);
 
-  // Fulfillment is sealed against the original pledge; "not yet" writes nothing.
+  // "I did it" settles the pledge's stake into the Rekindled Pool with a
+  // fulfillment memo in the same transaction; "not yet" writes nothing.
   let fulfilled = null;
   if (didIt && !session.fulfilledTx) {
-    fulfilled = await attestOnChain({
+    fulfilled = await settlePledgeStake(sessionId, {
       app: "ember",
       kind: "pledge_fulfilled",
       passion: session.passionLabel,

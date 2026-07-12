@@ -1,4 +1,5 @@
 import { getSession } from "@/lib/store";
+import { getStake } from "@/lib/solana";
 import { notFound } from "next/navigation";
 import CheckIn from "./check-in";
 
@@ -11,6 +12,7 @@ export default async function Stone({ params }: { params: Promise<{ id: string }
 
   const rekindled = s.verdict === "rekindled";
   const onChain = s.pledgeTx && !s.pledgeTx.startsWith("SIMULATED-");
+  const stake = rekindled ? await getStake(s.id) : null;
 
   return (
     <main className="mx-auto max-w-xl px-6 pb-24 pt-16">
@@ -43,6 +45,16 @@ export default async function Stone({ params }: { params: Promise<{ id: string }
             <blockquote className="font-display mt-8 max-w-md text-balance text-xl leading-relaxed text-stone-300">
               “{s.verdictText}”
             </blockquote>
+          )}
+
+          {stake && (
+            <div className="mt-8 flex items-center gap-3 rounded-full border border-amber-800/50 bg-amber-950/25 px-5 py-2.5 text-sm">
+              <span aria-hidden className="ember-dot h-2 w-2 rounded-full bg-amber-400" />
+              <span className="text-amber-200">{(stake.lamports / 1e9).toFixed(2)} SOL at stake</span>
+              <a href={stake.explorer} target="_blank" className="text-amber-500 transition-colors hover:text-amber-300">
+                view account →
+              </a>
+            </div>
           )}
 
           {rekindled && (
