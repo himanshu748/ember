@@ -62,7 +62,13 @@ Every session lands in a Snowflake `sessions` table, and the Atlas page is pure 
 
 ### Solana: the commitment device
 
-A pledge you can edit is a wish. Rekindle pledges and eulogy stones are attested on Solana devnet via the Memo program: `{kind, passion, commitment, confessionHash, ts}`. Timestamped, unforgeable, permanent. No wallet needed: a server-side vault signs, so you can go from confession to on-chain proof in one sitting.
+A pledge you can edit is a wish. When you choose to rekindle, Ember creates a dedicated on-chain account for your pledge and locks a real stake in it (0.01 SOL on devnet), with the commitment memo in the same transaction. Your pledge is not a database row. It is an address you can watch.
+
+When you return to your stone and report that you did it, the persona reacts in its own voice and the stake settles into the public [Rekindled Pool](https://explorer.solana.com/address/BEsKKCCtvEGnfDtyu3BhESVP1j65AR4BvfPATbbmLVLv?cluster=devnet), with a fulfillment memo sealed against the original pledge in the same transaction. Commitment, stake, follow-up, settlement: the whole loop lives on chain. A commitment with a follow-up is a system, not a receipt.
+
+Eulogy stones remain permanent memorial attestations via the Memo program. No wallet needed: a server-side vault signs. A mainnet version would swap the vault for a wallet-signed escrow program.
+
+A note on the economics, because it matters: devnet SOL is test currency with zero monetary value, and every stake is funded by Ember's own vault. Players never pay anything, never connect a wallet, and never have money at risk. On mainnet the model inverts, and that inversion is the whole point: the stake would be your own SOL, locked by your own wallet in an escrow program, and the only way to get it back would be to actually keep your pledge. Here the economics are simulated; the mechanics (funded pledge accounts, auditable settlement) are the real thing.
 
 ### Stack
 
