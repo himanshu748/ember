@@ -112,6 +112,8 @@ function fromRow(r: any): SessionRecord {
     verdict: r.VERDICT ?? "undecided",
     verdictText: r.VERDICT_TEXT ?? null,
     pledgeTx: r.PLEDGE_TX ?? null,
+    checkedIn: !!r.CHECKED_IN,
+    fulfilledTx: r.FULFILLED_TX ?? null,
     createdAt: r.CREATED_AT ? new Date(r.CREATED_AT).toISOString() : new Date().toISOString(),
   };
 }
@@ -162,9 +164,11 @@ export async function updateSession(id: string, patch: Partial<SessionRecord>): 
   if (!SF_ENABLED) return;
   try {
     const current = merged ?? { ...(await getSession(id)), ...patch } as SessionRecord;
-    await sfQuery(`UPDATE sessions SET verdict = ?, verdict_text = ?, pledge_tx = ? WHERE id = ?`, [
-      current.verdict ?? "undecided", current.verdictText ?? null, current.pledgeTx ?? null, id,
-    ]);
+    await sfQuery(
+      `UPDATE sessions SET verdict = ?, verdict_text = ?, pledge_tx = ?, checked_in = ?, fulfilled_tx = ? WHERE id = ?`,
+      [current.verdict ?? "undecided", current.verdictText ?? null, current.pledgeTx ?? null,
+       current.checkedIn ?? false, current.fulfilledTx ?? null, id]
+    );
   } catch (e) {
     console.error("Snowflake update failed:", e);
   }

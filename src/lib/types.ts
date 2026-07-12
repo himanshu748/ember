@@ -36,6 +36,8 @@ export interface SessionRecord {
   verdict: Verdict;
   verdictText: string | null; // eulogy text or negotiated first step
   pledgeTx: string | null;
+  checkedIn?: boolean; // returned to the stone and reported back
+  fulfilledTx?: string | null; // on-chain fulfillment memo
   createdAt: string;
 }
 

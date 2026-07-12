@@ -169,6 +169,22 @@ ${transcript}`,
   return { text: j.pactLine, step: j.step, deadline: j.deadline };
 }
 
+export async function checkinReaction(session: SessionRecord, didIt: boolean): Promise<string> {
+  if (!process.env.GEMINI_API_KEY) {
+    return didIt
+      ? "You came back. And you went. I felt the grip settle into your hands like no time had passed. Same time next week?"
+      : "You came back to tell me you haven't yet. That's not failure, that's honesty. The nets are still there. So am I.";
+  }
+  const text = await gen(`${session.persona.systemPrompt}
+
+They made this pledge: "${session.verdictText}"
+They have now returned to their stone and say they ${didIt ? "DID IT" : "have not done it yet"}.
+React as ${session.persona.name}, spoken aloud, 2-3 sentences.
+${didIt ? "Quietly proud, a little wry, and name one concrete next thing to keep the ember alive." : "No guilt. Warmth and patience. Remind them the step is still small and still theirs."}
+No markdown, no stage directions.`);
+  return text.trim();
+}
+
 /* ---------------- Demo mode (no GEMINI_API_KEY) ---------------- */
 
 function demoCompile(confession: string): CompileResult {

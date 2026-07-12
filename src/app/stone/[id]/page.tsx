@@ -1,5 +1,6 @@
 import { getSession } from "@/lib/store";
 import { notFound } from "next/navigation";
+import CheckIn from "./check-in";
 
 export const dynamic = "force-dynamic";
 
@@ -42,6 +43,10 @@ export default async function Stone({ params }: { params: Promise<{ id: string }
             <blockquote className="font-display mt-8 max-w-md text-balance text-xl leading-relaxed text-stone-300">
               “{s.verdictText}”
             </blockquote>
+          )}
+
+          {rekindled && (
+            <CheckIn sessionId={s.id} personaName={s.persona.name} alreadyFulfilled={!!s.checkedIn} />
           )}
 
           <div className="mt-12 w-full rounded-2xl border border-stone-800/80 bg-stone-950/60 p-5 text-xs">
